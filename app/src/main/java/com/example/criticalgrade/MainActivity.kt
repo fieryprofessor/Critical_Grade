@@ -25,14 +25,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.criticalgrade.ui.theme.CriticalGradeTheme
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.criticalgrade.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            CriticalGradeTheme {
+            AppTheme {
               MyApp()
             }
         }
@@ -41,12 +45,21 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MyApp() {
-    Scaffold(
-        topBar = { TopBar() }
-    ) {
-            innerPadding ->
-        MainContent( modifier = Modifier.padding(innerPadding))
+    val navController =rememberNavController()
+    NavHost(navController = navController , startDestination = "mainscreen"){
+        composable(route = "mainscreen"){
+            Scaffold(
+                topBar = { TopBar() }
+            ) {
+                    innerPadding ->
+                MainContent( navController, modifier = Modifier.padding(innerPadding))
+            }
+        }
+        composable(route = "calculatorscreen"){
+            Calculator(navController)
+        }
     }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,7 +75,7 @@ fun TopBar() {
 }
 
 @Composable
-fun MainContent(modifier: Modifier = Modifier) {
+fun MainContent(navController: NavController, modifier: Modifier = Modifier) {
     Column(
         modifier
             .fillMaxSize()
@@ -74,13 +87,15 @@ fun MainContent(modifier: Modifier = Modifier) {
             text = "Easily calculate and manage your Cumulative Grade Point Average with our" +
                 " user-friendly app. Track your academic progress, set goals, and stay on top of " +
                 "your studies effortlessly. Let's get started on your path to academic success!",
-            textAlign = TextAlign.Justify,
+            textAlign = TextAlign.Center,
+            letterSpacing = 5.sp,
+            lineHeight = 40.sp,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(6.dp)
         )
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate("calculatorscreen") },
             modifier = Modifier
                 .padding(top = 15.dp, start = 8.dp, end = 8.dp)
                 .fillMaxWidth()
