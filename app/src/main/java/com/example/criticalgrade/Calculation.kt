@@ -14,9 +14,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -32,11 +34,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.criticalgrade.ui.theme.AppTheme
 
 
 @Composable
@@ -61,7 +65,7 @@ fun Subjects(navController: NavController) {
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
         modifier = Modifier
-            .padding(10.dp)
+            .padding(top = 20.dp , bottom = 5.dp , start = 20.dp,end= 20.dp)
     )
     Spacer(modifier = Modifier.height(16.dp))
     var i by rememberSaveable{ mutableIntStateOf(0) }
@@ -91,37 +95,42 @@ fun Subjects(navController: NavController) {
 
         Button(
             onClick = { i=4 },
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primaryContainer),
             modifier = Modifier.padding(start = 2.dp , end = 2.dp)
         ) {
-            Text(text = "4")
+            Text(text = "4", color = MaterialTheme.colorScheme.onPrimaryContainer)
         }
         Button(
             onClick = { i=5 },
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primaryContainer),
             modifier = Modifier.padding(start = 2.dp , end = 2.dp)
         ) {
-            Text(text = "5")
+            Text(text = "5", color = MaterialTheme.colorScheme.onPrimaryContainer)
         }
         Button(
             onClick = { i=6 },
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primaryContainer),
             modifier = Modifier.padding(start = 2.dp , end = 2.dp)
         ) {
-            Text(text = "6")
+            Text(text = "6", color = MaterialTheme.colorScheme.onPrimaryContainer)
         }
         Button(
             onClick = { i=7 },
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primaryContainer),
             modifier = Modifier.padding(start = 2.dp , end = 2.dp)
         ) {
-            Text(text = "7")
+            Text(text = "7", color = MaterialTheme.colorScheme.onPrimaryContainer)
         }
         Button(
             onClick = { i=8 },
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primaryContainer),
             modifier = Modifier.padding(start = 2.dp , end = 2.dp)
         ) {
-            Text(text = "8")
+            Text(text = "8", color = MaterialTheme.colorScheme.onPrimaryContainer)
         }
     }
     Spacer(modifier = Modifier.height(16.dp))
-    Text(text = "Subjects selected: $i",fontSize = 20.sp)
+    Text(text = "Subjects selected: $i",fontSize = 20.sp,color=MaterialTheme.colorScheme.onSurface)
     Spacer(modifier = Modifier.height(32.dp))
 
     for(x in 1..i){
@@ -185,17 +194,26 @@ fun Subjects(navController: NavController) {
             }
             showsgpa = true
         },
-        colors = ButtonDefaults.buttonColors(Color(0xFFBEABE0))
+        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 10.dp, end = 10.dp)
     ) {
-        Text(text = "Calculate SGPA", color = Color.Black)
+        Text(text = "Calculate SGPA", color = MaterialTheme.colorScheme.onSecondary)
     }
     Spacer(modifier = Modifier.height(20.dp))
     val rounded = Math.round(sgpa*100)
     val answer = rounded/100.0
    FinalShower(key = showsgpa, answer = answer )
     Spacer(modifier = Modifier.height(20.dp))
-    Button(onClick = { navController.popBackStack("mainscreen",false) }) {
-        Text(text = "Back to Home Screen")
+    Button(
+        onClick = { navController.popBackStack("mainscreen",false) },
+        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiary),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 10.dp, end = 10.dp)
+    ) {
+        Text(text = "Back to Home Screen", color = MaterialTheme.colorScheme.onTertiary)
     }
     Spacer(modifier = Modifier.height(32.dp))
 }
@@ -243,7 +261,7 @@ fun FinalShower(key:Boolean,answer:Double) {
 
 @Composable
 fun GradeTextField(grade:String, onValueChange :(String)->Unit) {
-    val containerColor = Color(0xFF7E57C2)
+    val containerColor = MaterialTheme.colorScheme.onSurfaceVariant
     TextField(
         value = grade,
         onValueChange = {text->onValueChange(text)},
@@ -267,7 +285,7 @@ fun GradeTextField(grade:String, onValueChange :(String)->Unit) {
 @SuppressLint("InvalidColorHexValue")
 @Composable
 fun CreditTextField(credit:Int?, onValueChange :(Int)->Unit) {
-    val containerColor = Color(0xFF7D8CCED)
+    val containerColor = MaterialTheme.colorScheme.onSurfaceVariant
     TextField(
         value = credit.toString(),
         onValueChange = {text->onValueChange(text.toInt())},
@@ -281,6 +299,7 @@ fun CreditTextField(credit:Int?, onValueChange :(Int)->Unit) {
         ),
         shape = RoundedCornerShape(20.dp),
         textStyle = TextStyle(fontSize = 12.sp, color = Color.White),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
@@ -293,6 +312,8 @@ fun CreditTextField(credit:Int?, onValueChange :(Int)->Unit) {
 @Preview(showSystemUi = true , name = "CGPA Cal")
 @Composable
 private fun CalculatorPreview() {
-    val navController = rememberNavController()
+    AppTheme {
+        val navController = rememberNavController()
         Calculator(navController)
+    }
 }

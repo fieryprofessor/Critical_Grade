@@ -12,14 +12,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Blue
+import androidx.compose.ui.graphics.Color.Companion.Green
+import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,14 +39,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.criticalgrade.ui.theme.AppTheme
+import com.example.criticalgrade.ui.theme.DarkYellow
+import com.example.criticalgrade.ui.theme.Indigo
+import com.example.criticalgrade.ui.theme.Orange
+import com.example.criticalgrade.ui.theme.Violet
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AppTheme {
-              MyApp()
+            Surface(color = MaterialTheme.colorScheme.surface) {
+                AppTheme {
+                    MyApp()
+                }
             }
         }
     }
@@ -68,14 +83,25 @@ fun TopBar() {
     CenterAlignedTopAppBar(
         title = {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Critical Grade")
-        }
-        }
+            AppBarText()
+            }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(MaterialTheme.colorScheme.outlineVariant),
+    )
+}
+
+@Composable
+fun AppBarText() {
+    Text(
+        text = "Critical Grade",
+        fontSize = 30.sp,
+        fontWeight = FontWeight.ExtraBold
     )
 }
 
 @Composable
 fun MainContent(navController: NavController, modifier: Modifier = Modifier) {
+    val gradientColors = listOf(Red, Orange, DarkYellow, Green, Blue, Indigo, Violet)
     Column(
         modifier
             .fillMaxSize()
@@ -83,11 +109,13 @@ fun MainContent(navController: NavController, modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Text(
             text = "Easily calculate and manage your Cumulative Grade Point Average with our" +
                 " user-friendly app. Track your academic progress, set goals, and stay on top of " +
                 "your studies effortlessly. Let's get started on your path to academic success!",
             textAlign = TextAlign.Center,
+            style = TextStyle(brush = Brush.linearGradient(colors = gradientColors)),
             letterSpacing = 5.sp,
             lineHeight = 40.sp,
             fontSize = 30.sp,
@@ -96,6 +124,7 @@ fun MainContent(navController: NavController, modifier: Modifier = Modifier) {
         )
         Button(
             onClick = { navController.navigate("calculatorscreen") },
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiary),
             modifier = Modifier
                 .padding(top = 15.dp, start = 8.dp, end = 8.dp)
                 .fillMaxWidth()
@@ -108,6 +137,8 @@ fun MainContent(navController: NavController, modifier: Modifier = Modifier) {
 @Preview(showSystemUi = true , name = "My Preview")
 @Composable
 fun AppPreview(){
-    MyApp()
+    AppTheme {
+        MyApp()
+    }
 }
 
